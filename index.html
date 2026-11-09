@@ -1,14 +1,105 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Project-ROPS</title>
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
+    <h1>Rock Paper Scissors</h1>
+
+    <div class="game-container">
+        <button id="rock">Rock</button>
+        <button id="paper">Paper</button>
+        <button id="scissors">Scissors</button>
+    </div>
+
+    <div id="result-area">
+        <p id="round-result">Make your move!</p>
+        <p id="score-board">You: 0 | Computer: 0</p>
+        <h2 id="final-winner"></h2>
+    </div>
+
     <script>
-        
+        function getComputerChoice() {
+            let input = Math.random() * 3;
+            let input1 = Math.floor(input);
+            if (input1 === 0) {
+                return "rock";
+            }
+            else if (input1 === 1) {
+                return "paper";
+            }
+            else if (input1 === 2) {
+                return "scissors";
+            }
+        }
+
+        function playRound(humanChoice, computerChoice) {
+            let human = humanChoice.toLowerCase();
+            let computer = computerChoice.toLowerCase();
+
+            if (human === computer) {
+                return "tie!";
+            }
+            else if (human === "rock" && computer === "scissors") {
+                return "human";
+            }
+            else if (human === "paper" && computer === "rock") {
+                return "human";
+            }
+            else if (human === "scissors" && computer === "paper") {
+                return "human";
+            }
+            else {
+                return "computer";
+            }
+        }
+
+        let humanScores = 0;
+        let computerScores = 0;
+        let roundsPlayed = 0;
+
+        function playGame(humanChoice) {
+            if (roundsPlayed >= 5) return;
+
+            let computerChoice = getComputerChoice();
+            let result = playRound(humanChoice, computerChoice);
+            
+            roundsPlayed++;
+
+            let message = "";
+            if (result === "human") {
+                humanScores++;
+                message = `You Win! ${humanChoice} beats ${computerChoice}`;
+            } else if (result === "computer") {
+                computerScores++;
+                message = `You Lose! ${computerChoice} beats ${humanChoice}`;
+            } else {
+                message = `It's a tie! Both chose ${humanChoice}`;
+            }
+
+            document.getElementById('round-result').innerText = message;
+            document.getElementById('score-board').innerText = `You: ${humanScores} | Computer: ${computerScores}`;
+
+            if (roundsPlayed === 5) {
+                if (humanScores > computerScores) {
+                    document.getElementById('final-winner').innerText = " Winner: YOU!";
+                } else if (computerScores > humanScores) {
+                    document.getElementById('final-winner').innerText = " Winner: COMPUTER!";
+                } else {
+                    document.getElementById('final-winner').innerText = " It's a TIE!";
+                }
+            }
+        }
+
+        document.getElementById('rock').addEventListener('click', () => playGame('rock'));
+        document.getElementById('paper').addEventListener('click', () => playGame('paper'));
+        document.getElementById('scissors').addEventListener('click', () => playGame('scissors'));
     </script>
-    
+
 </body>
 </html>
